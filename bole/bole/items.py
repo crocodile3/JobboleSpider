@@ -11,4 +11,10 @@ import scrapy
 class BoleItem(scrapy.Item):
     # define the fields for your item here like:
     # name = scrapy.Field()
-    pass
+    title =scrapy.Field()
+    href =scrapy.Field()
+    excerpt =scrapy.Field()
+    date =scrapy.Field()
+    post_up =scrapy.Field()
+    img_url =scrapy.Field()
+    article = scrapy.Field()

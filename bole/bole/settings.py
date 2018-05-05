@@ -9,6 +9,8 @@
 #     https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://doc.scrapy.org/en/latest/topics/spider-middleware.html
 
+import os
+
 BOT_NAME = 'bole'
 
 SPIDER_MODULES = ['bole.spiders']
@@ -52,9 +54,11 @@ ROBOTSTXT_OBEY = True
 
 # Enable or disable downloader middlewares
 # See https://doc.scrapy.org/en/latest/topics/downloader-middleware.html
-#DOWNLOADER_MIDDLEWARES = {
-#    'bole.middlewares.BoleDownloaderMiddleware': 543,
-#}
+DOWNLOADER_MIDDLEWARES = {
+   'bole.middlewares.BoleDownloaderMiddleware': 543,
+    "bole.middlewares.ProxiesMiddleware":542,
+    'bole.middlewares.UAMiddleware': 540,
+}
 
 # Enable or disable extensions
 # See https://doc.scrapy.org/en/latest/topics/extensions.html
@@ -64,10 +68,13 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See https://doc.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'bole.pipelines.BolePipeline': 300,
-#}
-
+ITEM_PIPELINES = {
+   'bole.pipelines.BolePipeline': 300,
+    'scrapy.pipelines.images.ImagesPipeline':100,
+}
+IMAGES_URLS_FIELD = 'img_url'
+project_dir = os.path.abspath(os.path.dirname(__file__))
+IMAGES_STORE = os.path.join(project_dir,'IMG')
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://doc.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True

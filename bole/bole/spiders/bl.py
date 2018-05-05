@@ -4,6 +4,8 @@ import re
 import scrapy
 from copy import deepcopy
 
+from bole.items import BoleItem
+
 
 class BlSpider(scrapy.Spider):
     name = 'bl'
@@ -11,7 +13,7 @@ class BlSpider(scrapy.Spider):
     start_urls = ['http://blog.jobbole.com/all-posts/']
 
     def parse(self, response):
-        item = {}
+        item = BoleItem()
         divs = response.xpath("//div[@class='post floated-thumb']")
         for div in divs:
             item['title'] = div.xpath(".//div[@class='post-thumb']/a/@title").extract_first()
@@ -37,7 +39,9 @@ class BlSpider(scrapy.Spider):
         # item["title"] = response.xpath('//h3[@class="tb-main-title"]/text()').extract_first()
         date_pt = re.compile(r'<p class="entry-meta-hide-on-mobile">\s+(\d+/\d+/\d+)')
         item["date"] = date_pt.findall(html)[0]
-        item['post-up'] = response.xpath("//h10/text()").extract_first()
-        print(item)
-
+        item['post_up'] = response.xpath("//h10/text()").extract_first()
+        item['img_url'] = response.xpath("//div[@class='entry']/p/img/@src").extract()
+        data = response.css("div.entry").extract_first()
+        item['article'] = re.sub(r"</?.*?>|\s",'',data)
+        yield item
 
